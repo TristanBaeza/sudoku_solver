@@ -22,17 +22,23 @@ Ce projet est un **projet d'apprentissage**. L'objectif est que **je progresse m
 
 ## État d'avancement
 
-- [ ] Modélisation de la grille
+- [x] Récupération des données (dataset Kaggle)
+- [ ] Modélisation de la grille — en cours (classe `Sudoku_grid` : conversion grille/solution, `select_case` ; pas encore de propagation ni de vérification des contraintes)
 - [ ] Solveur par backtracking (version naïve)
 - [ ] Optimisations du backtracking
 - [ ] Exploration ML
 
-_Aucun code pour l'instant (dépôt initialisé avec README et .gitignore)._
-
 ## Choix techniques
 
-- Langage : à préciser (probablement Python — le `.gitignore` est celui de Python).
-- Structure du projet : à définir au fil de l'avancement.
+- Langage : Python, avec numpy. Environnement virtuel dans `.venv/`, dépendances dans `requirements.txt`.
+- Données : Kaggle `radcliffe/3-million-sudoku-puzzles-with-ratings`, téléchargé par `kagglehub_launcher/importing_dataset.py` dans `data/sudoku-3m.csv` (ignoré par Git via `data/*`). Colonnes `id,puzzle,solution,clues,difficulty` ; grilles en chaînes de 81 caractères lues ligne par ligne, `.` = case vide ; `difficulty` est un flottant.
+  - ⚠️ `output_dir` de kagglehub vide le dossier cible avec `force_download=True` : ne rien mettre d'autre dans `data/`.
+- Les scripts se lancent toujours **depuis la racine du projet** (chemins relatifs).
+- Modélisation (`backtracking/classes/sudoku_grid.py`) :
+  - `puzzle` = tableau de candidats **booléens 9×9×9** ; `puzzle[l, c, k]` vrai si le chiffre `k+1` est encore possible (attention au décalage chiffre/indice).
+  - `solution` = tableau d'entiers 9×9.
+  - Indice `i` de la chaîne → ligne `i // 9`, colonne `i % 9`.
+- Pistes pour le ML : ne pas instancier 3M objets ; charger toutes les grilles d'un bloc en tableau `(N, 9, 9)` sans boucle Python.
 
 ## Maintenance de ce fichier
 
